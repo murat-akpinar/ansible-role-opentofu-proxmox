@@ -1,0 +1,48 @@
+# Steps to System Check
+---
+
+    - name: OpenTofu Kullanıcısı Oluştur
+      community.general.proxmox_user:
+        api_host: "{{ ansible_host }}"
+        api_user: "{{ ansible_user }}"
+        api_password: "{{ ansible_ssh_pass }}"
+        node: "{{ inventory_hostname }}"
+        user: "{{ proxmox.opentofu_user }}"
+        comment: "OpenTofu kullanıcısı"
+        email: "opentofu@example.com"
+        password: "güvenlisifre"
+        state: present
+
+    - name: OpenTofu Rolü Oluştur
+      community.proxmox.proxmox_role:
+        api_host: "{{ ansible_host }}"
+        api_user: "{{ ansible_user }}"
+        api_password: "{{ ansible_ssh_pass }}"
+        roleid: "{{ proxmox.opentofu_role }}"
+        privs: "VM.Allocate,VM.Audit,VM.Console,VM.PowerMgmt"
+        state: present
+
+    - name: OpenTofu Kullanıcısı İçin API Anahtarı Oluştur
+      community.general.proxmox_token:
+        api_host: "{{ ansible_host }}"
+        api_user: "{{ ansible_user }}"
+        api_password: "{{ ansible_ssh_pass }}"
+        user: "{{ proxmox.opentofu_user }}"
+        tokenid: "fortofu"
+        comment: "tofu token"
+        privsep: 0
+        state: present
+      register: tofu_token_result
+
+    - name: API Anahtarını Değişken Olarak Kaydet
+      set_fact:
+        opentofu_token: "{{ tofu_token_result.token.value }}"
+
+    - name: Güncellenmiş Envanter Dosyasını Yazdır
+      template:
+        src: inventory_template.j2
+        dest: inventory/server_groups_updated.yml
+
+    - name: Güncellenmiş Envanteri Görüntüle
+      debug:
+        msg: "Güncellenmiş envanter: {{ lookup('file', 'inventory/server_groups_updated.yml') }}"
