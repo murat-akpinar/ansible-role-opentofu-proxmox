@@ -23,4 +23,10 @@
   register: add_token
   changed_when: false
 
+- name: Extract token value
+  set_fact:
+    token_value: "{{ add_token.stdout_lines | select('search', '^│\\s*value\\s*│') | map('regex_replace', '^│\\s*value\\s*│\\s*(\\S+)\\s*│$', '\\1') | list | first }}"
 
+- name: Debug - Output of token value
+  debug:
+    msg: "Token value: {{ token_value }}"
