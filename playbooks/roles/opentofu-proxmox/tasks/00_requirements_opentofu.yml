@@ -1,3 +1,7 @@
 # Steps by Step
 ---
 
+- name: Add OpenTofu user
+  shell: pveum user add "{{ opentofu_user }}" --password "{{ opentofu_password }}" --comment "OpenTofu account"
+  register: add_opentofu_user
+  changed_when: false

@@ -1,13 +1,6 @@
-hypervisor:
-  hosts:
-    proxmox:
-      ansible_host: 192.168.1.10
-      ansible_user: 'root'
-      ansible_password: 'admin'
-      ansible_connection: 'ssh'
-  vars:
-    proxmox:
-      opentofu_user: 'tofu@pam'
-      opentofu_password: 'admin'
-      opentofu_privileges: 'VM.Allocate VM.Clone VM.Config.CDROM VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Config.Pending VM.Config.Snapshot VM.Monitor VM.PowerMgmt'
-
+all:
+  children:
+    hypervisor:
+      hosts:
+        proxmox:
+          ansible_host: 192.168.1.10
