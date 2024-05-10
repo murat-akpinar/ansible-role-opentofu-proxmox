@@ -6,18 +6,10 @@
   register: add_opentofu_user
   changed_when: "'created user' in add_opentofu_user.stdout"
 
-- name: Debug - Output of Add OpenTofu user
-  debug:
-    msg: "Output: {{ add_opentofu_user }}"
-
 - name: Add OpenTofu role
-  shell: pveum role add {{ opentofu_user }} -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.Monitor VM.PowerMgmt SDN.Use"
+  shell: pveum role add tofu -privs "Datastore.AllocateSpace Datastore.Audit Pool.Allocate Sys.Audit Sys.Console Sys.Modify VM.Allocate VM.Audit VM.Clone VM.Config.CDROM VM.Config.Cloudinit VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Migrate VM.Monitor VM.PowerMgmt SDN.Use"
   register: add_opentofu_role
-  changed_when: "'created role' in add_opentofu_role.stdout"
-
-- name: Debug - Output of Add OpenTofu role
-  debug:
-    msg: "Output: {{ add_opentofu_role }}"
+  changed_when: false
 
 - name: Assign role to OpenTofu user
   shell: pveum aclmod / -user "{{ opentofu_user }}" -role "{{ opentofu_role }}"
@@ -25,17 +17,10 @@
   register: assign_role
   changed_when: false
 
-- name: Debug - Output of Assign role
-  debug:
-    msg: "Output: {{ assign_role }}"
-
 - name: Add token for OpenTofu user
   shell: pveum user token add "{{ opentofu_user }}" fortofu -expire 0 -privsep 0 -comment "tofu token"
   when: assign_role is succeeded
   register: add_token
   changed_when: false
 
-- name: Debug - Output of Add token
-  debug:
-    msg: "Output: {{ add_token }}"
 
