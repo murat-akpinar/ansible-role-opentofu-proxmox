@@ -11,7 +11,7 @@
     msg: "Output: {{ add_opentofu_user }}"
 
 - name: Add OpenTofu role
-  shell: pveum roleadd {{ opentofu_role }} -privs "{{ opentofu_privileges }}"
+  shell: pveum role add {{ opentofu_role }} -privs "{{ opentofu_privileges }}"
   register: add_opentofu_role
   changed_when: "'created role' in add_opentofu_role.stdout"
 
