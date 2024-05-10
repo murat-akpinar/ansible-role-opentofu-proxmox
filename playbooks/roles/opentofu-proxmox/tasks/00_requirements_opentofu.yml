@@ -10,9 +10,18 @@
   debug:
     msg: "Output: {{ add_opentofu_user }}"
 
+- name: Add OpenTofu role
+  shell: pveum roleadd {{ opentofu_role }} -privs "{{ opentofu_privileges }}"
+  register: add_opentofu_role
+  changed_when: "'created role' in add_opentofu_role.stdout"
+
+- name: Debug - Output of Add OpenTofu role
+  debug:
+    msg: "Output: {{ add_opentofu_role }}"
+
 - name: Assign role to OpenTofu user
   shell: pveum aclmod / -user "{{ opentofu_user }}" -role "{{ opentofu_role }}"
-  when: add_opentofu_user is succeeded
+  when: add_opentofu_role is succeeded
   register: assign_role
   changed_when: false
 
@@ -29,3 +38,4 @@
 - name: Debug - Output of Add token
   debug:
     msg: "Output: {{ add_token }}"
+
