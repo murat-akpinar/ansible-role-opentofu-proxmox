@@ -1,7 +1,7 @@
 - hosts: hypervisor
   become: true
   vars_files:
-    - vars/main.yml
+    - playbooks/roles/opentofu-proxmox/vars/main.yml
 
   roles:
     - opentofu-proxmox

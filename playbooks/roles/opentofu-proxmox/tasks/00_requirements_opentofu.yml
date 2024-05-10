@@ -2,6 +2,30 @@
 ---
 
 - name: Add OpenTofu user
-  shell: pveum user add "{{ opentofu_user }}" --password "{{ opentofu_password }}" --comment "OpenTofu account"
+  shell: pveum user add "{{ opentofu_user }}" --comment "OpenTofu account"
   register: add_opentofu_user
+  changed_when: "'created user' in add_opentofu_user.stdout"
+
+- name: Debug - Output of Add OpenTofu user
+  debug:
+    msg: "Output: {{ add_opentofu_user }}"
+
+- name: Assign role to OpenTofu user
+  shell: pveum aclmod / -user "{{ opentofu_user }}" -role "{{ opentofu_role }}"
+  when: add_opentofu_user is succeeded
+  register: assign_role
   changed_when: false
+
+- name: Debug - Output of Assign role
+  debug:
+    msg: "Output: {{ assign_role }}"
+
+- name: Add token for OpenTofu user
+  shell: pveum user token add "{{ opentofu_user }}" fortofu -expire 0 -privsep 0 -comment "tofu token"
+  when: assign_role is succeeded
+  register: add_token
+  changed_when: false
+
+- name: Debug - Output of Add token
+  debug:
+    msg: "Output: {{ add_token }}"
