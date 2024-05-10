@@ -1,4 +1,3 @@
 ansible_user: root
 opentofu_user: 'tofu@pam'
-opentofu_role: 'PVETofu'
-opentofu_privileges: 'VM.Allocate VM.Clone VM.Config.CDROM VM.Config.CPU VM.Config.Disk VM.Config.HWType VM.Config.Memory VM.Config.Network VM.Config.Options VM.Config.Pending VM.Config.Snapshot VM.Monitor VM.PowerMgmt'
+opentofu_role: 'tofu'
