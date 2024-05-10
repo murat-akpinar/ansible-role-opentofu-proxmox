@@ -2,7 +2,7 @@
 ---
 
 - name: Add OpenTofu user
-  shell: pveum user add "{{ opentofu_user }}" --comment "OpenTofu account"
+  shell: pveum user add "{{ proxmox.opentofu_user }}" --comment "OpenTofu account"
   register: add_opentofu_user
   changed_when: "'created user' in add_opentofu_user.stdout"
 
