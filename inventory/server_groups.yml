@@ -9,4 +9,5 @@ hypervisor:
   vars:
     proxmox:
     opentofu_user: 'tofu@pam'
+    opentofu_password: 'admin'
     opentofu_role: 'tofu'
